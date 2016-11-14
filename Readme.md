@@ -1,5 +1,5 @@
 # NOME_DO_SOFTWARE
-  Este aplicativo foi desenvolvido para o desafio da Programa��o Radical 2016, onde deve ser desenvolvido um software para uma pequena cl�nica m�dica.
+  Este aplicativo foi desenvolvido para o desafio da Programa��o Radical 2016, onde deve ser desenvolvido um software para uma pequena clínica médica.
 
 
 # Objetivo
