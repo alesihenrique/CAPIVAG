@@ -1,14 +1,27 @@
 <?php
     require_once('header.php');
-    require_once('../config/Conexao.php');  
-    $pdo = (ConnectionFactory::getConnection());
+    if (isset($_POST['nomepaciente_atend'])) {
+    	require_once('../config/Conexao.php');
+    	$pdo = (ConnectionFactory::getConnection());
 
-    $stm = $pdo->query("SELECT * FROM atendimentos");
-    $stm->execute();
-    $atendimentos = $stm->fetchAll();
+		$stm = $pdo->prepare("INSERT INTO atendimentos
+								(nomepaciente_atend,
+								nomemedico_atend,
+								dtconsulta_atend) VALUES
+								(:nomepaciente,
+								:nomemedico,
+								:dataconsulta)");
+		$stm->bindValue(':nomepaciente', $_POST['nomepaciente_atend']);
+		$stm->bindValue(':nomemedico', $_POST['nomemedico_atend']);
+		$stm->bindValue(':dataconsulta', $_POST['dtconsulta_atend']);
+		$insert = $stm->execute();
+		if ($insert) {
+			echo '<script>alert("Cadastrado com sucesso!");</script>';	
+			echo '<script>window.location.href="atendimentos.php"</script>';
+		} 
+    }
 ?>
-
-    <div class="main-panel">
+<div class="main-panel">
         <nav class="navbar navbar-default navbar-fixed">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -18,7 +31,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Atendimentos</a>
+                    <a class="navbar-brand" href="#">Dashboard</a>
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-left">
@@ -80,64 +93,42 @@
         </nav>
 
 
-        <div class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12" style="margin-bottom: 10px;">
-                        <a href="new-attendance.php">
-                            <button type="button" class="btn btn-success" style="background-color: #5cb85c !important; border-color: #4cae4c; color: #fff;">Cadastrar novo atendimento</button>    
-                        </a>                        
-                    </div>  
-                    <div class="col-md-12">
-                        <div class="card">
-                            <!--
-                            <div class="header">
-                                <h4 class="title">Striped Table with Hover</h4>
-                                <p class="category">Here is a subtitle for this table</p>
-                            </div>
-                            -->                                                    
+    <div class="content">
 
-                            <div class="content table-responsive table-full-width">
-                                <table id="table" class="table table-hover table-striped">
-                                    <thead>
-                                        <th>ID</th>
-                                    	<th>Nome do paciente</th>
-                                    	<th>Médico responsável</th>
-                                    	<th>Data de cadastro</th>
-                                    	<th>Data da consulta</th>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach($atendimentos as $row){ ?>
-
-                                            <tr>
-                                                <td><?php echo $row['id_atend']; ?></td>
-                                                <td><?php echo $row['nomepaciente_atend']; ?></td>
-                                                <td><?php echo $row['nomemedico_atend']; ?></td>
-                                                <td><?php echo $row['dtcadastro_atend']; ?></td>
-                                                <td><?php echo $row['dtconsulta_atend']; ?></td>
-                                            </tr>
-                                        <?php } ?>        
-                                    </tbody>
-                                </table>
-
-                                <script type="text/javascript">
-                                    $('#table').bootstrapTable({
-                                        data: data,
-                                        showExport: true,
-                                        exportOptions: {
-                                            fileName: 'custom_file_name'
-                                        }
-                                    });
-                                </script>                               
-
-                            </div>
-                        </div>
-                    </div>
+    <form action="new-attendance.php" method="POST">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Nome do paciente</label>
+                    <input type="text" name="nomepaciente_atend" class="form-control" placeholder="Informe o nome do paciente" required="">
+                </div>
             </div>
         </div>
-    </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label>Médico responsável</label>
+                    <select class="form-control" name="nomemedico_atend" required="">
+                    	<option value="">Selecione</option>
+                    	<option value="Dr. Carlos Andreazza">Dr. Carlos Andreazza</option>
+                    	<option value="Dr. Carlos Andreazza">Dr. Carlos Andreazza</option>
+                    	<option value="Dr. Carlos Andreazza">Dr. Carlos Andreazza</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Data da consulta</label>
+                    <input type="date" name="dtconsulta_atend" class="form-control" required="">
+                </div>
+            </div>            
+        </div>        
 
+        <button type="submit" class="btn btn-info btn-fill pull-right">Cadastrar Atendimento</button>
+        <div class="clearfix"></div>
+    </form>
+</div>
 <?php
     require_once('footer.php');
 ?>
-
+        

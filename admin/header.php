@@ -62,7 +62,7 @@ if (!$_SESSION) {
     	<div class="sidebar-wrapper">
             <div class="logo">
                 <a href="dashboard.php" class="simple-text">
-                    Medprev <br/>
+                    Clinmed <br/>
                     Painel Administrativo
                 </a>
             </div>
